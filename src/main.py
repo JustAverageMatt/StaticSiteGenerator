@@ -1,4 +1,5 @@
 import os
+import sys
 import shutil
 from htmlnode import ParentNode, LeafNode
 from markdown_blocks import markdown_to_html_node
@@ -34,7 +35,7 @@ def extract_title(markdown: str):
     return title.replace("# ", "").strip()
 
 
-def generate_page(from_path, template_path, dest_path):
+def generate_page(from_path, template_path, dest_path, base_path):
     dest_path = dest_path.replace(".md", ".html")
     print(f"Generating page from {from_path} to {
           dest_path} using {template_path}")
@@ -47,6 +48,8 @@ def generate_page(from_path, template_path, dest_path):
     title = extract_title(content_text)
     html_output = template_text.replace("{{ Title }}", title)
     html_output = html_output.replace("{{ Content }}", content)
+    html_output = html_output.replace('href="/', f'href="{base_path}')
+    html_output = html_output.replace('src="/', f'src="{base_path}')
     with open(dest_path, "w") as output:
         output.write(html_output)
 
@@ -69,14 +72,25 @@ def generate_pages_recursive(dir_path_content, template_path, dest_dir_path):
 
 
 def main():
+    # Get base path from command line or use default
+    base_path = "/"
+    if len(sys.argv) > 1:
+        base_path = sys.argv[1]
+
+    # Update output directory to docs instead of public
+    output_dir = "docs"
+
     src = "/home/justaveragematt/workspace/github.com/justaveragematt/StaticSiteGenerator/static/"
-    dst = "/home/justaveragematt/workspace/github.com/justaveragematt/StaticSiteGenerator/public/"
+    dst = f"/home/justaveragematt/workspace/github.com/justaveragematt/StaticSiteGenerator/{
+        output_dir}/"
     copy_files(src, dst)
 
     from_path = "/home/justaveragematt/workspace/github.com/justaveragematt/StaticSiteGenerator/content/"
     template_path = "/home/justaveragematt/workspace/github.com/justaveragematt/StaticSiteGenerator/template.html"
-    dest_path = "/home/justaveragematt/workspace/github.com/justaveragematt/StaticSiteGenerator/public/"
-    generate_pages_recursive(from_path, template_path, dest_path)
+    dest_path = f"/home/justaveragematt/workspace/github.com/justaveragematt/StaticSiteGenerator/{
+        output_dir}/"
+    generate_pages_recursive(from_path, template_path, dest_path, base_path)
 
 
-main()
+if __name__ == "__main__":
+    main()
