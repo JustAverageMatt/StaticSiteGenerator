@@ -54,7 +54,7 @@ def generate_page(from_path, template_path, dest_path, base_path):
         output.write(html_output)
 
 
-def generate_pages_recursive(dir_path_content, template_path, dest_dir_path):
+def generate_pages_recursive(dir_path_content, template_path, dest_dir_path, base_path):
     if not os.path.exists(dir_path_content):
         raise ValueError(f"Source directory '{
                          dir_path_content}' does not exist.")
@@ -65,10 +65,11 @@ def generate_pages_recursive(dir_path_content, template_path, dest_dir_path):
         dest_item = os.path.join(dest_dir_path, item)
         if os.path.isdir(src_item):
             # Recursively Generate HTML Files
-            generate_pages_recursive(src_item, template_path, dest_item)
+            generate_pages_recursive(
+                src_item, template_path, dest_item, base_path)
         else:
             # Generate HTML File
-            generate_page(src_item, template_path, dest_item)
+            generate_page(src_item, template_path, dest_item, base_path)
 
 
 def main():
@@ -79,10 +80,11 @@ def main():
 
     # Update output directory to docs instead of public
     output_dir = "docs"
+    os.makedirs(output_dir, exist_ok=True)
 
     src = "/home/justaveragematt/workspace/github.com/justaveragematt/StaticSiteGenerator/static/"
-    dst = f"/home/justaveragematt/workspace/github.com/justaveragematt/StaticSiteGenerator/{
-        output_dir}/"
+    dst = os.path.join(
+        "/home/justaveragematt/workspace/github.com/justaveragematt/StaticSiteGenerator", output_dir)
     copy_files(src, dst)
 
     from_path = "/home/justaveragematt/workspace/github.com/justaveragematt/StaticSiteGenerator/content/"
