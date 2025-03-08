@@ -36,7 +36,8 @@ def extract_title(markdown: str):
 
 def generate_page(from_path, template_path, dest_path):
     dest_path = dest_path.replace(".md", ".html")
-    print(f"Generating page from {from_path} to {dest_path} using {template_path}")
+    print(f"Generating page from {from_path} to {
+          dest_path} using {template_path}")
     with open(from_path, "r") as file:
         content_text = file.read()
     with open(template_path, "r") as file:
@@ -52,7 +53,8 @@ def generate_page(from_path, template_path, dest_path):
 
 def generate_pages_recursive(dir_path_content, template_path, dest_dir_path):
     if not os.path.exists(dir_path_content):
-        raise ValueError(f"Source directory '{dir_path_content}' does not exist.")
+        raise ValueError(f"Source directory '{
+                         dir_path_content}' does not exist.")
     os.makedirs(dest_dir_path, exist_ok=True)
     # Iterate over each item in the source directory
     for item in os.listdir(dir_path_content):
@@ -67,13 +69,13 @@ def generate_pages_recursive(dir_path_content, template_path, dest_dir_path):
 
 
 def main():
-    src = "/home/jsolt/StaticSiteGenerator/static"
-    dst = "/home/jsolt/StaticSiteGenerator/public"
+    src = "/home/justaveragematt/workspace/github.com/justaveragematt/StaticSiteGenerator/static/"
+    dst = "/home/justaveragematt/workspace/github.com/justaveragematt/StaticSiteGenerator/public/"
     copy_files(src, dst)
 
-    from_path = "/home/jsolt/StaticSiteGenerator/content/"
-    template_path = "/home/jsolt/StaticSiteGenerator/template.html"
-    dest_path = "/home/jsolt/StaticSiteGenerator/public/"
+    from_path = "/home/justaveragematt/workspace/github.com/justaveragematt/StaticSiteGenerator/content/"
+    template_path = "/home/justaveragematt/workspace/github.com/justaveragematt/StaticSiteGenerator/template.html"
+    dest_path = "/home/justaveragematt/workspace/github.com/justaveragematt/StaticSiteGenerator/public/"
     generate_pages_recursive(from_path, template_path, dest_path)
 
 
